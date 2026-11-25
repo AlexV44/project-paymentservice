@@ -1,4 +1,6 @@
 package com.project.payment_service.entity.enums;
 
-public enum OrderStatus {
+public enum PaymentStatus {
+    SUCCESS,
+    FAILED
 }
