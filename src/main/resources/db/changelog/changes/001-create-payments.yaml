@@ -12,8 +12,8 @@ databaseChangeLog:
                     bsonType: "object",
                     required: ["order_id", "user_id", "status", "timestamp", "payment_amount"],
                     properties: {
-                      order_id: { bsonType: "string" },
-                      user_id: { bsonType: "string" },
+                      order_id: { bsonType: "binData" },
+                      user_id: { bsonType: "binData" },
                       status: { enum: ["SUCCESS", "FAILED"] },
                       timestamp: { bsonType: "date" },
                       payment_amount: { bsonType: "decimal" }
