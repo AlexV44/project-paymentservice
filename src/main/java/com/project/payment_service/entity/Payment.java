@@ -35,7 +35,8 @@ public class Payment {
 
     private PaymentStatus status;
 
-    private Instant timestamp;
+    @Builder.Default
+    private Instant timestamp = Instant.now();
 
     @Field(name = "payment_amount", targetType = FieldType.DECIMAL128)
     private BigDecimal paymentAmount;
