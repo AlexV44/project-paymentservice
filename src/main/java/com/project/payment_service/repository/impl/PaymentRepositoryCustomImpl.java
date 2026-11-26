@@ -6,12 +6,12 @@ import com.project.payment_service.repository.PaymentRepositoryCustom;
 import com.project.payment_service.repository.PaymentTotal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -41,10 +41,10 @@ public class PaymentRepositoryCustomImpl implements PaymentRepositoryCustom {
                 ? new Query()
                 : new Query(new Criteria().andOperator(filters));
 
-        long total = mongoTemplate.count(filterQuery, Payment.class);
         List<Payment> content = mongoTemplate.find(Query.of(filterQuery).with(pageable), Payment.class);
 
-        return new PageImpl<>(content, pageable, total);
+        return PageableExecutionUtils.getPage(content, pageable, () ->
+                mongoTemplate.count(filterQuery, Payment.class));
     }
 
     @Override
