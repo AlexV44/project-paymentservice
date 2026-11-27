@@ -1,3 +1,44 @@
+server:
+  port: ${SERVER_PORT:8083}
+
 spring:
   application:
     name: payment-service
+
+  mongodb:
+    uri: mongodb://${MONGO_USER:root}:${MONGO_PASSWORD:root}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_DB:payment_db}?authSource=admin
+    representation:
+      uuid: standard
+  data:
+    mongodb:
+      auto-index-creation: false
+
+  security:
+    oauth:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8080/realms/auth-realm}
+          jwk-set-uri: ${JWK_SET_URI:http://keycloak:8080/realms/auth-realm/openid-connect/certs}
+
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    client:
+      config:
+        default:
+          connection-timeout: 3000
+          read-timeout: 3000
+
+app:
+  external-api:
+    random-url: ${RANDOM_API_URL:https://www.random.org}
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        minimum-number-of-calls: 5
